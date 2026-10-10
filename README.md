@@ -14,8 +14,8 @@ The CDN libraries need an internet connection. Without one, the pages fall back 
 
 Every path in the project is relative and every filename is lowercase, so it works from a domain root or from a sub-path like `username.github.io/repo/`.
 
-1. Push the contents of this folder to a GitHub repository. `index.html` should sit at the root of the repo, or in a `/docs` folder.
-2. In the repository, open **Settings → Pages**. Under **Build and deployment**, choose **Deploy from a branch**, then pick your branch and the `/ (root)` folder (or `/docs`).
+1. Push the repository to GitHub. `index.html` already sits at the repo root, which is what GitHub Pages serves.
+2. In the repository, open **Settings → Pages**. Under **Build and deployment**, choose **Deploy from a branch**, then pick your branch and the `/ (root)` folder. Don't pick `/docs`: that folder holds the coding conventions, not the site.
 3. After a minute the site is live at `https://<user>.github.io/<repo>/`. The picker is the home page.
 
 The empty `.nojekyll` file tells GitHub Pages to serve the files as they are, with no Jekyll processing.
@@ -80,6 +80,7 @@ The placeholder glass is transparent, so the landmark scene stays visible throug
 | `assets/landmarks/<slug>.js` | Adds the landmark SVG string to `window.PENDANT_LANDMARKS`. |
 | `assets/pendants/<slug>.svg` | Placeholder product render (bezel, bail, chain, glass), with a different metal per location. |
 | `.nojekyll` | Tells GitHub Pages to serve the files without Jekyll processing. |
+| `docs/website-coding-conventions.md` | The HTML, CSS and JS conventions this code follows. |
 
 ## Scroll phases
 
