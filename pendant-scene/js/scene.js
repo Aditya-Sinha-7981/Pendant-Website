@@ -64,43 +64,43 @@
       section.style.setProperty('--pw-size', pendantWindow.size);
     }
 
-    if (config.location && config.location.landmarkSvg) {
-      section.style.setProperty('--landmark-url', 'url("' + new URL(config.location.landmarkSvg, document.baseURI).href + '")');
-    }
-
     if (product.title) document.title = product.title;
   }
 
-  function inlineLandmark(section) {
-    var image = section.querySelector('.landmark-image');
-    if (!image || !window.fetch || !window.DOMParser || window.location.protocol === 'file:') return;
+  function injectLandmark(section) {
+    var place = (config && config.location) || {};
+    var markup = window.PENDANT_LANDMARKS && window.PENDANT_LANDMARKS[place.landmark];
+    var figure = section.querySelector('.landmark');
+    var still = section.querySelector('.still-landmark');
+    if (!markup || !figure || !window.DOMParser) return;
 
-    fetch(image.getAttribute('src')).then(function (response) {
-      if (!response.ok) throw new Error('Landmark request failed');
-      return response.text();
-    }).then(function (markup) {
-      var svg = new DOMParser().parseFromString(markup, 'image/svg+xml').documentElement;
-      if (!svg || svg.nodeName.toLowerCase() !== 'svg') return;
+    var svg = new DOMParser().parseFromString(markup, 'image/svg+xml').documentElement;
+    if (!svg || svg.nodeName.toLowerCase() !== 'svg') return;
 
-      svg.querySelectorAll('script, foreignObject').forEach(function (node) {
-        node.parentNode.removeChild(node);
-      });
+    svg.querySelectorAll('script, foreignObject').forEach(function (node) {
+      node.parentNode.removeChild(node);
+    });
 
-      var viewBox = (svg.getAttribute('viewBox') || '').split(/[\s,]+/);
-      if (viewBox.length === 4 && parseFloat(viewBox[3]) > 0) {
-        section.style.setProperty('--lm-ratio', (parseFloat(viewBox[2]) / parseFloat(viewBox[3])).toFixed(4));
-      }
+    var viewBox = (svg.getAttribute('viewBox') || '').split(/[\s,]+/);
+    if (viewBox.length === 4 && parseFloat(viewBox[3]) > 0) {
+      section.style.setProperty('--lm-ratio', (parseFloat(viewBox[2]) / parseFloat(viewBox[3])).toFixed(4));
+    }
 
-      svg.removeAttribute('width');
-      svg.removeAttribute('height');
-      svg.setAttribute('class', 'landmark-svg');
-      svg.setAttribute('role', 'img');
-      svg.setAttribute('aria-label', image.getAttribute('alt') || '');
-      svg.setAttribute('focusable', 'false');
-      image.parentNode.replaceChild(document.importNode(svg, true), image);
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
+    svg.setAttribute('class', 'landmark-svg');
+    svg.setAttribute('focusable', 'false');
 
-      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
-    }).catch(function () {});
+    var copy = document.importNode(svg, true);
+    copy.setAttribute('role', 'img');
+    copy.setAttribute('aria-label', place.landmarkAlt || place.name || '');
+    figure.appendChild(copy);
+
+    if (!still) return;
+    var stillCopy = document.importNode(svg, true);
+    stillCopy.setAttribute('aria-hidden', 'true');
+    stillCopy.setAttribute('preserveAspectRatio', 'xMidYMax meet');
+    still.appendChild(stillCopy);
   }
 
   function bindCart(section) {
@@ -263,7 +263,7 @@
   sections.forEach(function (section) {
     if (config) populate(section);
     bindCart(section);
-    inlineLandmark(section);
+    injectLandmark(section);
   });
 
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {

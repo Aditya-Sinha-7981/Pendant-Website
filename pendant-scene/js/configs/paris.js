@@ -2,7 +2,7 @@ window.PENDANT_CONFIG = {
   location: {
     name: 'Paris',
     tagline: 'Where it all began',
-    landmarkSvg: 'assets/landmark.svg',
+    landmark: 'paris',
     landmarkAlt: 'Silhouette of the Eiffel Tower'
   },
   product: {
@@ -16,7 +16,7 @@ window.PENDANT_CONFIG = {
       '45 cm fine cable chain, adjustable to 40 cm',
       'Arrives in a linen-wrapped keepsake box'
     ],
-    pendantImage: 'assets/pendant-placeholder.svg',
+    pendantImage: 'assets/pendants/paris.svg',
     pendantImageAlt: 'Square silver Paris Memory Pendant on a fine chain',
     pendantWindow: { x: 0.26, y: 1.06, size: 0.48 },
     ctaLabel: 'Add to Cart',
@@ -28,14 +28,20 @@ window.PENDANT_CONFIG = {
       skyBottom: '#1b2450',
       accent: '#f5d98a',
       landmark: '#e9c97f',
-      text: '#f4efe4'
+      text: '#f4efe4',
+      metalLight: '#eef0f3',
+      metalMid: '#a9adb4',
+      metalDark: '#5d6169'
     },
     day: {
       skyTop: '#7ec8ff',
       skyBottom: '#e6f4ff',
       accent: '#ff9e4a',
       landmark: '#27304a',
-      text: '#18203a'
+      text: '#18203a',
+      metalLight: '#ffffff',
+      metalMid: '#c2c6cd',
+      metalDark: '#7d828b'
     }
   }
 };

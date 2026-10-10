@@ -3,13 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Memory Pendant</title>
-  <meta name="description" content="A square memory pendant that keeps a place close.">
+  <title>Memory Pendants</title>
+  <meta name="description" content="Square memory pendants that keep a place close.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/config.js"></script>
   <script src="js/theme.js"></script>
 </head>
 <body>
@@ -26,119 +25,73 @@
   </header>
 
   <main>
-    <section class="custom_pendant_scene" aria-labelledby="pendant-title">
-      <div class="scene-stage">
-        <div class="scene-backdrop" aria-hidden="true">
-          <div class="sky-layer sky-night">
-            <div class="sky-far">
-              <div class="sky-stars"></div>
-            </div>
-            <div class="sky-near">
-              <span class="shooting-star" style="--x: 78%; --y: 12%; --t: 11s; --d: 3s;"></span>
-              <span class="shooting-star" style="--x: 34%; --y: 6%; --t: 17s; --d: 9s;"></span>
-            </div>
-            <div class="sky-grain"></div>
-          </div>
-          <div class="sky-layer sky-day">
-            <div class="sky-far">
-              <div class="sun"></div>
-            </div>
-            <div class="sky-near">
-              <div class="sky-clouds"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="scene-dim" aria-hidden="true"></div>
-
-        <div class="pendant-group">
-          <div class="scene-window">
-            <div class="window-picture" aria-hidden="true">
-              <div class="picture-sky picture-night">
-                <div class="picture-stars"></div>
-              </div>
-              <div class="picture-sky picture-day">
-                <span class="picture-sun"></span>
-              </div>
-            </div>
-            <figure class="landmark">
-              <img class="landmark-image" src="assets/landmark.svg" data-config-src="location.landmarkSvg" data-config-alt="location.landmarkAlt" alt="">
-            </figure>
-            <div class="window-haze" aria-hidden="true"></div>
+    <section class="custom_location_picker" aria-labelledby="picker-heading">
+      <div class="center-div">
+        <div class="content-wrapper">
+          <div class="section-header">
+            <p class="eyebrow">Memory Pendants</p>
+            <h1 id="picker-heading" class="section-heading">Choose a place to keep</h1>
+            <p class="description">Four places, each held behind glass in a square locket.</p>
           </div>
 
-          <svg class="pendant-art pendant-chain" viewBox="0 0 180 480" aria-hidden="true" focusable="false">
-            <path d="M90 274 L36 0 M90 274 L144 0" fill="none" stroke-linecap="round" stroke-width="3.6" stroke-dasharray="6 3.2" class="chain-shade"/>
-            <path d="M90 274 L36 0 M90 274 L144 0" fill="none" stroke-linecap="round" stroke-width="1.2" stroke-dasharray="6 3.2" class="chain-shine"/>
-          </svg>
-
-          <svg class="pendant-art pendant-frame" viewBox="0 0 180 480" aria-hidden="true" focusable="false">
-            <defs>
-              <linearGradient id="pendant-frame-metal" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" class="metal-light"/>
-                <stop offset="0.3" class="metal-mid"/>
-                <stop offset="0.5" class="metal-light"/>
-                <stop offset="0.75" class="metal-dark"/>
-                <stop offset="1" class="metal-mid"/>
-              </linearGradient>
-            </defs>
-            <ellipse cx="90" cy="286" rx="9" ry="13" fill="none" stroke="url(#pendant-frame-metal)" stroke-width="4.5"/>
-            <rect x="85" y="295" width="10" height="9" rx="2" fill="url(#pendant-frame-metal)"/>
-            <path fill="url(#pendant-frame-metal)" fill-rule="evenodd" d="M26 300 H154 A26 26 0 0 1 180 326 V454 A26 26 0 0 1 154 480 H26 A26 26 0 0 1 0 454 V326 A26 26 0 0 1 26 300 Z M30 318 H150 A12 12 0 0 1 162 330 V450 A12 12 0 0 1 150 462 H30 A12 12 0 0 1 18 450 V330 A12 12 0 0 1 30 318 Z"/>
-            <rect x="0.5" y="300.5" width="179" height="179" rx="25.5" fill="none" class="frame-edge"/>
-          </svg>
-
-          <div class="pendant-still">
-            <div class="still-picture" aria-hidden="true">
-              <span class="still-landmark"></span>
-            </div>
-            <img class="pendant-image" src="assets/pendant-placeholder.svg" data-config-src="product.pendantImage" data-config-alt="product.pendantImageAlt" alt="Square memory pendant on a fine chain">
-          </div>
+          <ul class="location-grid">
+            <li>
+              <a class="location-card" href="paris.html">
+                <span class="card-preview" data-landmark="paris" aria-hidden="true"></span>
+                <span class="card-meta">Paris</span>
+                <span class="card-title">Eiffel Tower</span>
+              </a>
+            </li>
+            <li>
+              <a class="location-card" href="great-wall.html">
+                <span class="card-preview" data-landmark="great-wall" aria-hidden="true"></span>
+                <span class="card-meta">China</span>
+                <span class="card-title">Great Wall</span>
+              </a>
+            </li>
+            <li>
+              <a class="location-card" href="taj-mahal.html">
+                <span class="card-preview" data-landmark="taj-mahal" aria-hidden="true"></span>
+                <span class="card-meta">Agra</span>
+                <span class="card-title">Taj Mahal</span>
+              </a>
+            </li>
+            <li>
+              <a class="location-card" href="big-ben.html">
+                <span class="card-preview" data-landmark="big-ben" aria-hidden="true"></span>
+                <span class="card-meta">London</span>
+                <span class="card-title">Big Ben</span>
+              </a>
+            </li>
+          </ul>
         </div>
-
-        <div class="scene-details">
-          <div class="details-inner">
-            <p class="eyebrow detail-item" data-config="location.name">Memory Collection</p>
-            <h1 id="pendant-title" class="details-title detail-item" data-config="product.title">Memory Pendant</h1>
-            <p class="details-tagline detail-item" data-config="location.tagline">A place, kept close.</p>
-            <p class="details-price detail-item" data-config="product.price" hidden></p>
-            <span class="details-divider detail-item" aria-hidden="true"></span>
-            <p class="description detail-item" data-config="product.description">A square locket that holds a single place behind glass, so the memory stays with you.</p>
-            <ul class="details-list detail-item" data-config-list="product.bullets">
-              <li>Sterling silver square frame</li>
-              <li>Sealed glass face</li>
-              <li>Fine adjustable chain</li>
-            </ul>
-            <div class="details-cta detail-item">
-              <button type="button" class="cta-button button-primary js-add-to-cart" aria-label="Add to cart">
-                <span class="cta-label" data-config="product.ctaLabel">Add to Cart</span>
-              </button>
-            </div>
-            <p class="cart-status visually-hidden" role="status" aria-live="polite"></p>
-          </div>
-        </div>
-
-        <div class="scroll-nudge" aria-hidden="true">
-          <span class="nudge-label">Scroll</span>
-          <span class="nudge-line"><span></span></span>
-        </div>
-      </div>
-
-      <div class="buy-bar">
-        <div class="buy-bar-info">
-          <span class="buy-bar-title" data-config="product.title">Memory Pendant</span>
-          <span class="buy-bar-price" data-config="product.price" hidden></span>
-        </div>
-        <button type="button" class="cta-button button-primary js-add-to-cart" aria-label="Add to cart">
-          <span class="cta-label" data-config="product.ctaLabel">Add to Cart</span>
-        </button>
       </div>
     </section>
   </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
-  <script src="js/scene.js" defer></script>
+  <script src="assets/landmarks/paris.js"></script>
+  <script src="assets/landmarks/great-wall.js"></script>
+  <script src="assets/landmarks/taj-mahal.js"></script>
+  <script src="assets/landmarks/big-ben.js"></script>
+  <script>
+    (function () {
+      var section = document.querySelector('section.custom_location_picker');
+      if (!section) return;
+      if (!window.PENDANT_LANDMARKS || !window.DOMParser) return;
+
+      section.querySelectorAll('.card-preview').forEach(function (preview) {
+        var markup = window.PENDANT_LANDMARKS[preview.getAttribute('data-landmark')];
+        if (!markup) return;
+
+        var svg = new DOMParser().parseFromString(markup, 'image/svg+xml').documentElement;
+        if (!svg || svg.nodeName.toLowerCase() !== 'svg') return;
+
+        svg.setAttribute('class', 'landmark-svg');
+        svg.setAttribute('focusable', 'false');
+        svg.setAttribute('preserveAspectRatio', 'xMidYMax meet');
+        preview.appendChild(document.importNode(svg, true));
+      });
+    })();
+  </script>
 </body>
 </html>

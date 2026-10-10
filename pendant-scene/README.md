@@ -1,49 +1,85 @@
-# Memory Pendant: scroll-driven product page
+# Memory Pendants: scroll-driven product pages
 
-A single static product page. On scroll, a landmark recedes and becomes the picture inside a square pendant. The pendant then moves aside while the product details appear. It's plain HTML, CSS and JS with no build step. GSAP, ScrollTrigger and Lenis load from CDNs with pinned versions.
+One static product page per place. On scroll, the landmark recedes and becomes the picture inside a square pendant. The pendant then moves aside while the product details appear.
 
-## Run it
+There are four locations: Paris, the Great Wall, the Taj Mahal and Big Ben. All four pages share the same CSS and JS; only the config and the landmark change. It's plain HTML, CSS and JS with no build step. GSAP, ScrollTrigger and Lenis load from CDNs with pinned versions.
 
-```bash
-npx serve .
-# or
-python3 -m http.server 8000
-```
+## Open it
 
-Then open the printed URL.
+Double-click `index.html`. It opens straight from disk (`file://`) with no local server, and every page renders exactly as it would online, including the palette-coloured landmark.
 
-You can also open `index.html` straight from disk and the page works. Browsers block `fetch()` on `file://`, though, so the landmark can't be inlined. It falls back to an `<img>` tinted with a CSS filter instead of the exact palette colour. Use a local server to see the real colours.
+The CDN libraries need an internet connection. Without one, the pages fall back to the static stacked layout.
 
-## Make a new location
+## Deploy to GitHub Pages
 
-1. **`js/config.js`**: change `location`, `product` and `palette`. This is the only file with place-specific text or colours.
-2. **`assets/landmark.svg`**: replace it with the new landmark silhouette.
-   - Use `fill="currentColor"` so the theme can recolour it.
-   - Any `viewBox` works. The page reads the aspect ratio from it.
-   - Set the bottom of the landmark on the bottom edge of the viewBox, because the scene anchors to the ground line.
-3. **`assets/pendant-placeholder.svg`** (or whatever file `product.pendantImage` points to): replace it with the real product render.
-4. **`product.pendantWindow`**: if the new image's glass window sits somewhere else, update this. It tells the page where the window is inside the image so the live scene lines up with it. All three values are fractions of the **image width**:
-   - `x`: the window's left edge;
-   - `y`: the window's top edge;
-   - `size`: the window's side length.
+Every path in the project is relative and every filename is lowercase, so it works from a domain root or from a sub-path like `username.github.io/repo/`.
 
-   For the placeholder (300 × 500 viewBox, window at 78,318, size 144) that gives `{ x: 0.26, y: 1.06, size: 0.48 }`.
+1. Push the contents of this folder to a GitHub repository. `index.html` should sit at the root of the repo, or in a `/docs` folder.
+2. In the repository, open **Settings → Pages**. Under **Build and deployment**, choose **Deploy from a branch**, then pick your branch and the `/ (root)` folder (or `/docs`).
+3. After a minute the site is live at `https://<user>.github.io/<repo>/`. The picker is the home page.
 
-   If the window is transparent (as in the placeholder), the live landmark scene stays visible through the glass. An opaque photo simply covers it.
+The empty `.nojekyll` file tells GitHub Pages to serve the files as they are, with no Jekyll processing.
 
-Palette keys per theme: `skyTop`, `skyBottom`, `accent`, `landmark`, `text`. Each key becomes a CSS variable (`--night-sky-top`, `--day-landmark`, …).
+## Add a new location
+
+Use a short lowercase slug, for example `colosseum`.
+
+1. **Config:** copy `js/configs/paris.js` to `js/configs/colosseum.js`. Then change:
+   - `location`: `name`, `tagline`, `landmarkAlt`, and `landmark: 'colosseum'`;
+   - `product`: title, price, description, bullets, and `pendantImage: 'assets/pendants/colosseum.svg'`;
+   - `palette`: night and day colours (see the keys below).
+2. **Landmark script:** create `assets/landmarks/colosseum.js`:
+   ```js
+   window.PENDANT_LANDMARKS = window.PENDANT_LANDMARKS || {};
+   window.PENDANT_LANDMARKS['colosseum'] = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">...</svg>';
+   ```
+   - Use `fill="currentColor"` so the theme can recolour the silhouette. `fill-opacity` works for background layers.
+   - Put the base of the landmark on the bottom edge of the viewBox. The scene anchors to that ground line.
+   - Any `viewBox` works; the page reads the aspect ratio from it. Keep the string on one line, with double quotes and no single quotes.
+3. **Pendant image:** add `assets/pendants/colosseum.svg`, or a real render. If its glass window sits somewhere other than in the placeholders, update `product.pendantWindow` (see below).
+4. **Page:** copy `paris.html` to `colosseum.html`. Change only the `<title>` and the two script tags in `<head>`, so they point to `js/configs/colosseum.js` and `assets/landmarks/colosseum.js`.
+5. **Picker card:** in `index.html`:
+   - copy one `<li>` card and change its `href`, `data-landmark`, meta line and title;
+   - add `<script src="assets/landmarks/colosseum.js"></script>` next to the other landmark scripts at the bottom.
+
+### Palette keys
+
+Each theme (`night`, `day`) takes these keys:
+
+| Key | Used for |
+|---|---|
+| `skyTop`, `skyBottom` | sky gradient |
+| `accent` | sun glow, horizon glow, divider lines and bullet dashes |
+| `landmark` | silhouette colour |
+| `text` | all text and the primary button |
+| `metalLight`, `metalMid`, `metalDark` | the animated bezel and chain. Match these to the pendant image so the crossfade doesn't shift colour. |
+
+Each key becomes a CSS variable, such as `--night-sky-top` or `--day-metal-mid`. The dim overlay, hairlines and buy-bar background are derived from these colours, so a new palette needs nothing else.
+
+### Pendant window
+
+`product.pendantWindow` tells the page where the glass window sits inside the pendant image, so the live scene lines up with it. All three values are fractions of the **image width**:
+- `x`: the window's left edge;
+- `y`: the window's top edge;
+- `size`: the window's side length.
+
+The placeholders all use a 300 × 500 viewBox with the window at 78,318, size 144. That gives `{ x: 0.26, y: 1.06, size: 0.48 }`.
+
+The placeholder glass is transparent, so the landmark scene stays visible through it. An opaque photo simply covers it.
 
 ## File map
 
 | File | Role |
 |---|---|
-| `index.html` | Markup for the scene. Holds generic fallback text that shows if JS fails. `data-config` attributes mark where config values go. |
-| `css/style.css` | All styles, written with native CSS nesting. There are two layouts:<br>• a static stacked one (no JS, reduced motion, or a library failed to load);<br>• the animated one, scoped under `html.is-animated`. |
-| `js/config.js` | `window.PENDANT_CONFIG`: every location- and product-specific value. |
-| `js/theme.js` | Runs in `<head>` before first paint. It:<br>• applies the palette;<br>• picks day or night (saved choice, then `prefers-color-scheme`);<br>• handles the toggle;<br>• generates the stars and clouds. |
-| `js/scene.js` | Fills the page from config, inlines the landmark SVG, builds the GSAP timelines, starts Lenis, and holds the add-to-cart hook. |
-| `assets/landmark.svg` | Landmark silhouette. |
-| `assets/pendant-placeholder.svg` | Placeholder product render (bezel, bail, chain, glass). |
+| `index.html` | Location picker: four cards, each with a small silhouette preview. |
+| `paris.html`, `great-wall.html`, `taj-mahal.html`, `big-ben.html` | One page per location. They're identical apart from the `<title>` and the config and landmark scripts. Each holds generic fallback text that shows if JS fails. |
+| `css/style.css` | Shared styles, written with native CSS nesting. The scene has two layouts:<br>• static stacked (no JS, reduced motion, or a library failed to load);<br>• animated, scoped under `html.is-animated`.<br>The picker styles are here too. |
+| `js/theme.js` | Shared. Runs in `<head>` before first paint. It applies the palette, picks day or night (saved choice, then `prefers-color-scheme`), handles the toggle, and generates the stars and clouds. |
+| `js/scene.js` | Shared. Fills the page from config, injects the landmark SVG inline, builds the GSAP timelines, starts Lenis, and holds the add-to-cart hook. |
+| `js/configs/<slug>.js` | Sets `window.PENDANT_CONFIG`: every location- and product-specific value. |
+| `assets/landmarks/<slug>.js` | Adds the landmark SVG string to `window.PENDANT_LANDMARKS`. |
+| `assets/pendants/<slug>.svg` | Placeholder product render (bezel, bail, chain, glass), with a different metal per location. |
+| `.nojekyll` | Tells GitHub Pages to serve the files without Jekyll processing. |
 
 ## Scroll phases
 
@@ -72,13 +108,14 @@ JS reads these at every refresh, so you can tune the layout from CSS alone.
 
 ## Porting to Shopify
 
-The scene is self-contained: one `<section>` with its own CSS and JS, and no globals besides the config. To turn it into a section:
+The scene is self-contained: one `<section>` with its own CSS and JS. The only globals are `window.PENDANT_CONFIG` and `window.PENDANT_LANDMARKS`. To turn it into a section:
 
 1. Move the markup into `sections/pendant-scene.liquid`.
 2. Replace `window.PENDANT_CONFIG` with JSON rendered from Liquid:
    - `product.title`, `product.price | money` and `product.description`;
    - bullets from a list metafield;
    - `pendantImage` from the featured media;
-   - `landmarkSvg`, `tagline`, `pendantWindow` and `palette` from product metafields (or section settings).
+   - `tagline`, `pendantWindow` and `palette` from product metafields (or section settings);
+   - the landmark SVG string from a metafield, rendered into `window.PENDANT_LANDMARKS` (or straight into the `.landmark` figure).
 3. Replace the body of `onAddToCart(product)` in `js/scene.js` with a `fetch('/cart/add.js', …)` call that returns its Promise. The button already waits for the Promise before showing "Added".
 4. Load GSAP, ScrollTrigger and Lenis from the theme's assets or the same pinned CDN URLs.
