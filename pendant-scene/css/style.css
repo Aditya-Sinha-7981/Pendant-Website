@@ -1,0 +1,974 @@
+:root {
+  --primary_font: "Cormorant Garamond", "Cormorant", Georgia, "Times New Roman", serif;
+  --secondary_font: "Manrope", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --night-sky-top: #0b1026;
+  --night-sky-bottom: #1b2450;
+  --night-accent: #f5d98a;
+  --night-landmark: #e9c97f;
+  --night-text: #f4efe4;
+  --day-sky-top: #7ec8ff;
+  --day-sky-bottom: #e6f4ff;
+  --day-accent: #ff9e4a;
+  --day-landmark: #27304a;
+  --day-text: #18203a;
+
+  --primary_text_color: var(--night-text);
+  --sky_top: var(--night-sky-top);
+  --sky_bottom: var(--night-sky-bottom);
+  --accent_color: var(--night-accent);
+  --landmark_color: var(--night-landmark);
+  --page_background: var(--night-sky-top);
+  --button_text_color: var(--night-sky-top);
+  --haze_color: var(--night-sky-bottom);
+  --dim_color: rgba(4, 6, 20, 0.5);
+  --hairline: rgba(244, 239, 228, 0.24);
+  --glass: rgba(255, 255, 255, 0.06);
+  --bar_background: rgba(11, 16, 38, 0.94);
+  --metal_light: #eef0f3;
+  --metal_mid: #a9adb4;
+  --metal_dark: #5d6169;
+  --day_opacity: 0;
+  color-scheme: dark;
+
+  &[data-theme="day"] {
+    --primary_text_color: var(--day-text);
+    --sky_top: var(--day-sky-top);
+    --sky_bottom: var(--day-sky-bottom);
+    --accent_color: var(--day-accent);
+    --landmark_color: var(--day-landmark);
+    --page_background: var(--day-sky-bottom);
+    --button_text_color: #ffffff;
+    --haze_color: var(--day-sky-bottom);
+    --dim_color: rgba(246, 250, 255, 0.55);
+    --hairline: rgba(24, 32, 58, 0.2);
+    --glass: rgba(255, 255, 255, 0.45);
+    --bar_background: rgba(246, 250, 255, 0.95);
+    --metal_light: #ffffff;
+    --metal_mid: #c2c6cd;
+    --metal_dark: #7d828b;
+    --day_opacity: 1;
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: light) {
+    &:not([data-theme]) {
+      --primary_text_color: var(--day-text);
+      --sky_top: var(--day-sky-top);
+      --sky_bottom: var(--day-sky-bottom);
+      --accent_color: var(--day-accent);
+      --landmark_color: var(--day-landmark);
+      --page_background: var(--day-sky-bottom);
+      --button_text_color: #ffffff;
+      --haze_color: var(--day-sky-bottom);
+      --dim_color: rgba(246, 250, 255, 0.55);
+      --hairline: rgba(24, 32, 58, 0.2);
+      --glass: rgba(255, 255, 255, 0.45);
+      --metal_light: #ffffff;
+      --metal_mid: #c2c6cd;
+      --metal_dark: #7d828b;
+      --day_opacity: 1;
+      color-scheme: light;
+    }
+  }
+}
+
+@keyframes starTwinkle {
+  to {
+    opacity: 0.12;
+  }
+}
+
+@keyframes cloudDrift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--dx));
+  }
+}
+
+@keyframes shootingStar {
+  0% {
+    opacity: 0;
+    transform: rotate(-24deg) translateX(0);
+  }
+  1.5% {
+    opacity: 1;
+  }
+  6% {
+    opacity: 0;
+    transform: rotate(-24deg) translateX(-40vmin);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(-24deg) translateX(-40vmin);
+  }
+}
+
+@keyframes nudgeLine {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+
+  &.lenis,
+  &.lenis body {
+    height: auto;
+  }
+
+  &.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: var(--page_background);
+  color: var(--primary_text_color);
+  font-family: var(--secondary_font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.6s ease, color 0.6s ease;
+}
+
+main {
+  display: block;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary_text_color);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--secondary_font);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.description {
+  margin: 0;
+  font-family: var(--secondary_font);
+  font-size: clamp(15px, 1.05vw, 17px);
+  line-height: 1.75;
+  opacity: 0.82;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 14px 34px;
+  border-radius: 9999px;
+  border: 1px solid var(--primary_text_color);
+  background: transparent;
+  color: var(--primary_text_color);
+  font-family: var(--secondary_font);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.35s cubic-bezier(0.23, 1, 0.32, 1), color 0.35s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.35s cubic-bezier(0.23, 1, 0.32, 1), transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+
+  &.button-primary {
+    background: var(--primary_text_color);
+    color: var(--button_text_color);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  }
+
+  &.is-added {
+    background: transparent;
+    color: var(--primary_text_color);
+  }
+}
+
+/* Site Header */
+.site-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 20;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0 0;
+
+  .theme-toggle {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--hairline);
+    background: var(--glass);
+    color: var(--primary_text_color);
+    cursor: pointer;
+    transition: background-color 0.6s ease, border-color 0.6s ease, color 0.6s ease, transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+
+    &:hover {
+      transform: scale(1.06);
+    }
+
+    & svg {
+      grid-area: 1 / 1;
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .icon-sun {
+      opacity: 0;
+      transform: rotate(-45deg) scale(0.6);
+    }
+
+    :root[data-theme="day"] & {
+      .icon-moon {
+        opacity: 0;
+        transform: rotate(45deg) scale(0.6);
+      }
+
+      .icon-sun {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .no-js & {
+      display: none;
+    }
+  }
+}
+
+/* Custom Pendant Scene */
+section.custom_pendant_scene {
+  --vh: 1vh;
+  --sq: min(calc(38 * var(--vh)), 30vw);
+  --sq-y: calc(-2 * var(--vh));
+  --lm-h: calc(72 * var(--vh));
+  --lm-y: calc(-3 * var(--vh));
+  --lm-ratio: 0.5;
+  --pw-x: 0.26;
+  --pw-y: 1.06;
+  --pw-size: 0.48;
+  --d-pendant-x: 0.25;
+  --m-pendant-scale: 0.7;
+  --m-pendant-y: 0.21;
+  position: relative;
+  overflow-x: clip;
+
+  @supports (height: 1dvh) {
+    --vh: 1dvh;
+  }
+
+  @media screen and (max-width: 899px) {
+    --sq: min(calc(34 * var(--vh)), 56vw);
+    --lm-h: calc(68 * var(--vh));
+    --m-pendant-scale: 0.8;
+    --m-pendant-y: 0.24;
+  }
+
+  @media screen and (max-width: 599px) {
+    --m-pendant-scale: 0.7;
+    --m-pendant-y: 0.21;
+  }
+
+  @media screen and (max-width: 599px) and (max-height: 700px) {
+    --m-pendant-scale: 0.6;
+    --m-pendant-y: 0.19;
+  }
+
+  .scene-stage {
+    position: relative;
+    padding-bottom: 72px;
+  }
+
+  .scene-backdrop {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .sky-layer {
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.6s ease;
+
+    &.sky-night {
+      background:
+        radial-gradient(ellipse 80% 40% at 50% 100%, color-mix(in srgb, var(--night-accent) 12%, transparent), transparent 70%),
+        linear-gradient(180deg, var(--night-sky-top) 0%, var(--night-sky-bottom) 100%);
+    }
+
+    &.sky-day {
+      opacity: var(--day_opacity);
+      background:
+        radial-gradient(ellipse 90% 45% at 50% 100%, color-mix(in srgb, var(--day-accent) 14%, transparent), transparent 70%),
+        linear-gradient(180deg, var(--day-sky-top) 0%, var(--day-sky-bottom) 100%);
+    }
+  }
+
+  .sky-far,
+  .sky-near {
+    position: absolute;
+    inset: -8% 0;
+  }
+
+  .sky-stars,
+  .picture-stars,
+  .sky-clouds {
+    position: absolute;
+    inset: 0;
+  }
+
+  .star {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--s);
+    height: var(--s);
+    border-radius: 50%;
+    background: #ffffff;
+    opacity: var(--o);
+
+    &.is-twinkling {
+      animation: starTwinkle var(--t) ease-in-out var(--d) infinite alternate;
+    }
+  }
+
+  .shooting-star {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 110px;
+    height: 1px;
+    background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0));
+    opacity: 0;
+    animation: shootingStar var(--t) linear var(--d) infinite;
+
+    @media screen and (max-width: 899px) {
+      display: none;
+    }
+  }
+
+  .sky-grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .sun {
+    position: absolute;
+    left: 74%;
+    top: 22%;
+    width: clamp(120px, 16vw, 240px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, #ffffff 0 16%, color-mix(in srgb, var(--day-accent) 30%, #ffffff) 21%, color-mix(in srgb, var(--day-accent) 22%, transparent) 38%, transparent 70%);
+
+    @media screen and (max-width: 899px) {
+      left: 78%;
+      top: 18%;
+    }
+  }
+
+  .cloud {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--w);
+    aspect-ratio: 2.6;
+    opacity: var(--o);
+    background:
+      radial-gradient(ellipse 36% 48% at 30% 64%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 70%),
+      radial-gradient(ellipse 32% 58% at 54% 46%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 70%),
+      radial-gradient(ellipse 30% 42% at 75% 64%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 70%);
+    animation: cloudDrift var(--t) ease-in-out var(--d) infinite alternate;
+  }
+
+  .scene-dim {
+    display: none;
+  }
+
+  .pendant-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .scene-window {
+    position: relative;
+    width: 100%;
+    height: calc(84 * var(--vh));
+  }
+
+  .window-picture,
+  .window-haze,
+  .pendant-art {
+    display: none;
+  }
+
+  .landmark {
+    position: absolute;
+    left: 50%;
+    top: calc(50% + var(--lm-y));
+    width: min(calc(var(--lm-h) * var(--lm-ratio)), 88vw);
+    aspect-ratio: var(--lm-ratio);
+    margin: 0;
+    color: var(--landmark_color);
+    transform: translate(-50%, -50%);
+    transition: color 0.6s ease;
+
+    .landmark-svg,
+    .landmark-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .landmark-svg {
+      color: inherit;
+    }
+
+    .landmark-image {
+      filter: brightness(0) invert(0.86) sepia(0.6);
+
+      :root[data-theme="day"] & {
+        filter: brightness(0) invert(0.18);
+      }
+    }
+  }
+
+  .pendant-still {
+    --still-w: min(300px, 72vw);
+    position: relative;
+    width: var(--still-w);
+    margin-top: calc(-12 * var(--vh));
+
+    .still-picture {
+      position: absolute;
+      left: calc(var(--pw-x) * var(--still-w));
+      top: calc(var(--pw-y) * var(--still-w));
+      width: calc(var(--pw-size) * var(--still-w));
+      aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: 8%;
+      background:
+        radial-gradient(ellipse 90% 40% at 50% 100%, color-mix(in srgb, var(--accent_color) 26%, transparent), transparent 72%),
+        linear-gradient(180deg, var(--sky_top) 0%, var(--sky_bottom) 100%);
+    }
+
+    .still-landmark {
+      position: absolute;
+      inset: 14% 8% -1%;
+      background: var(--landmark_color);
+      -webkit-mask: var(--landmark-url) center bottom / contain no-repeat;
+      mask: var(--landmark-url) center bottom / contain no-repeat;
+    }
+  }
+
+  .pendant-image {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .scene-details {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 48px 24px 0;
+  }
+
+  .details-inner {
+    width: 100%;
+    max-width: 34rem;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    &::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--accent_color);
+    }
+  }
+
+  .details-title {
+    margin: 18px 0 0;
+    font-family: var(--primary_font);
+    font-size: clamp(40px, 4.4vw, 68px);
+    font-weight: 300;
+    line-height: 1.02;
+    letter-spacing: -0.5px;
+  }
+
+  .details-tagline {
+    margin: 10px 0 0;
+    font-family: var(--primary_font);
+    font-size: clamp(19px, 1.6vw, 24px);
+    font-style: italic;
+    font-weight: 300;
+    opacity: 0.78;
+  }
+
+  .details-price {
+    margin: 26px 0 0;
+    font-family: var(--secondary_font);
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    font-variant-numeric: lining-nums;
+  }
+
+  .details-divider {
+    display: block;
+    width: 56px;
+    height: 1px;
+    margin: 26px 0;
+    background: var(--accent_color);
+  }
+
+  .details-list {
+    display: grid;
+    gap: 10px;
+    margin: 26px 0 0;
+    padding: 0;
+    list-style: none;
+
+    & li {
+      position: relative;
+      padding-left: 26px;
+      font-size: 14px;
+      line-height: 1.55;
+      opacity: 0.86;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 11px;
+        width: 14px;
+        height: 1px;
+        background: var(--accent_color);
+      }
+    }
+  }
+
+  .details-cta {
+    margin-top: 34px;
+  }
+
+  .scroll-nudge,
+  .buy-bar {
+    display: none;
+  }
+}
+
+html.is-animated section.custom_pendant_scene {
+  height: 450vh;
+  height: 450svh;
+
+  .scene-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .scene-dim {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: var(--dim_color);
+    opacity: 0;
+    transition: background-color 0.6s ease;
+  }
+
+  .pendant-group {
+    position: absolute;
+    inset: 0;
+    display: block;
+    will-change: transform;
+  }
+
+  .scene-window {
+    --clip: 0;
+    position: absolute;
+    inset: 0;
+    height: auto;
+    -webkit-clip-path: inset(calc((50% + var(--sq-y) - var(--sq) / 2) * var(--clip)) calc((50% - var(--sq) / 2) * var(--clip)) calc((50% - var(--sq-y) - var(--sq) / 2) * var(--clip)) calc((50% - var(--sq) / 2) * var(--clip)) round calc(var(--sq) * 0.0833 * var(--clip)));
+    clip-path: inset(calc((50% + var(--sq-y) - var(--sq) / 2) * var(--clip)) calc((50% - var(--sq) / 2) * var(--clip)) calc((50% - var(--sq-y) - var(--sq) / 2) * var(--clip)) calc((50% - var(--sq) / 2) * var(--clip)) round calc(var(--sq) * 0.0833 * var(--clip)));
+  }
+
+  .window-picture {
+    display: block;
+    position: absolute;
+    left: calc(50% - var(--sq) / 2);
+    top: calc(50% + var(--sq-y) - var(--sq) / 2);
+    width: var(--sq);
+    height: var(--sq);
+    border-radius: calc(var(--sq) * 0.0833);
+    overflow: hidden;
+    opacity: 0;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 calc(var(--sq) * 0.1) rgba(0, 0, 0, 0.3);
+    }
+
+    .picture-sky {
+      position: absolute;
+      inset: 0;
+      transition: opacity 0.6s ease;
+
+      &.picture-night {
+        background:
+          radial-gradient(ellipse 90% 40% at 50% 100%, color-mix(in srgb, var(--night-accent) 26%, transparent), transparent 72%),
+          linear-gradient(180deg, var(--night-sky-top) 0%, var(--night-sky-bottom) 100%);
+      }
+
+      &.picture-day {
+        opacity: var(--day_opacity);
+        background:
+          radial-gradient(ellipse 90% 40% at 50% 100%, color-mix(in srgb, var(--day-accent) 26%, transparent), transparent 72%),
+          linear-gradient(180deg, var(--day-sky-top) 0%, var(--day-sky-bottom) 100%);
+      }
+    }
+
+    .picture-sun {
+      position: absolute;
+      left: 76%;
+      top: 22%;
+      width: 26%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, #ffffff 0 22%, color-mix(in srgb, var(--day-accent) 30%, transparent) 42%, transparent 70%);
+    }
+  }
+
+  .landmark {
+    will-change: transform;
+  }
+
+  .window-haze {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 10%, var(--haze_color) 100%);
+    opacity: 0;
+  }
+
+  .pendant-art {
+    display: block;
+    position: absolute;
+    left: calc(50% - var(--sq) * 0.625);
+    top: calc(50% + var(--sq-y) - var(--sq) * 2.7083);
+    width: calc(var(--sq) * 1.25);
+    height: calc(var(--sq) * 3.3333);
+    overflow: visible;
+    opacity: 0;
+  }
+
+  .pendant-frame {
+    transform-origin: 50% 81.25%;
+
+    .metal-light {
+      stop-color: var(--metal_light);
+    }
+
+    .metal-mid {
+      stop-color: var(--metal_mid);
+    }
+
+    .metal-dark {
+      stop-color: var(--metal_dark);
+    }
+
+    .frame-edge {
+      stroke: var(--metal_light);
+      stroke-opacity: 0.6;
+    }
+  }
+
+  .pendant-chain {
+    .chain-shade {
+      stroke: var(--metal_dark);
+    }
+
+    .chain-shine {
+      stroke: var(--metal_light);
+    }
+  }
+
+  .pendant-still {
+    display: contents;
+
+    .still-picture {
+      display: none;
+    }
+  }
+
+  .pendant-image {
+    position: absolute;
+    left: calc(50% - var(--sq) / 2 - var(--pw-x) * var(--sq) / var(--pw-size));
+    top: calc(50% + var(--sq-y) - var(--sq) / 2 - var(--pw-y) * var(--sq) / var(--pw-size));
+    width: calc(var(--sq) / var(--pw-size));
+    max-width: none;
+    margin: 0;
+    opacity: 0;
+  }
+
+  .scene-details {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 clamp(24px, 6vw, 112px) 0 clamp(16px, 3vw, 56px);
+    opacity: 0;
+    visibility: hidden;
+
+    @media screen and (max-width: 899px) {
+      top: calc(var(--m-pendant-y) * 100% + var(--sq) * var(--m-pendant-scale) * 0.625 + 20px);
+      bottom: calc(84px + env(safe-area-inset-bottom));
+      left: 0;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 0 max(24px, env(safe-area-inset-left)) 0 max(24px, env(safe-area-inset-right));
+    }
+  }
+
+  .details-inner {
+    @media screen and (max-width: 899px) {
+      max-width: 36rem;
+    }
+  }
+
+  .details-title {
+    @media screen and (max-width: 899px) {
+      margin-top: 12px;
+      font-size: clamp(32px, 7vw, 52px);
+    }
+  }
+
+  .details-tagline {
+    @media screen and (max-width: 899px) {
+      margin-top: 4px;
+      font-size: 18px;
+    }
+  }
+
+  .details-price {
+    @media screen and (max-width: 899px) {
+      display: none;
+    }
+  }
+
+  .details-divider {
+    @media screen and (max-width: 899px) {
+      margin: 16px 0;
+    }
+  }
+
+  .description {
+    @media screen and (max-width: 899px) {
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    @media screen and (max-width: 599px) {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+  }
+
+  .details-list {
+    @media screen and (max-width: 899px) {
+      gap: 6px;
+      margin-top: 16px;
+
+      & li {
+        font-size: 15px;
+      }
+    }
+
+    @media screen and (max-width: 599px) {
+      & li {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .details-cta {
+    @media screen and (max-width: 899px) {
+      display: none;
+    }
+  }
+
+  .scroll-nudge {
+    position: absolute;
+    left: 50%;
+    bottom: calc(22px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    transform: translateX(-50%);
+    opacity: 0.8;
+
+    .nudge-label {
+      font-family: var(--secondary_font);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      padding-left: 4px;
+    }
+
+    .nudge-line {
+      position: relative;
+      width: 1px;
+      height: 44px;
+      overflow: hidden;
+      background: var(--hairline);
+
+      & span {
+        position: absolute;
+        inset: 0;
+        background: var(--primary_text_color);
+        animation: nudgeLine 2.2s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+      }
+    }
+  }
+
+  .buy-bar {
+    @media screen and (max-width: 899px) {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px max(16px, env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+      background: var(--bar_background);
+      border-top: 1px solid var(--hairline);
+      visibility: hidden;
+      transform: translateY(110%);
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), visibility 0s linear 0.5s, background-color 0.6s ease;
+    }
+
+    .buy-bar-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .buy-bar-title {
+      overflow: hidden;
+      font-family: var(--primary_font);
+      font-size: 18px;
+      line-height: 1.2;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .buy-bar-price {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .cta-button {
+      flex-shrink: 0;
+      min-height: 46px;
+      padding: 12px 24px;
+      font-size: 12px;
+    }
+  }
+
+  &.is-revealed .buy-bar {
+    @media screen and (max-width: 899px) {
+      visibility: visible;
+      transform: none;
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), visibility 0s linear 0s, background-color 0.6s ease;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  section.custom_pendant_scene {
+    .star,
+    .cloud,
+    .shooting-star,
+    .nudge-line span {
+      animation: none !important;
+    }
+
+    .sky-layer,
+    .picture-sky,
+    .landmark,
+    .cta-button {
+      transition: none !important;
+    }
+
+    .cta-button:hover {
+      transform: none;
+    }
+  }
+}
